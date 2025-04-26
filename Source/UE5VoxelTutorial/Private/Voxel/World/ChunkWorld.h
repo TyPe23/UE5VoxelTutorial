@@ -30,7 +30,7 @@ public:
 	int Size = 32;
 
 	UPROPERTY(EditInstanceOnly, Category="Height Map")
-	EGenerationType GenerationType;
+	EVoxelTutorialGenerationType GenerationType;
 
 	UPROPERTY(EditInstanceOnly, Category="Height Map")
 	float Frequency = 0.03f;

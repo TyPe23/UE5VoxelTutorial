@@ -47,10 +47,10 @@ void AChunkBase::GenerateHeightMap()
 {
 	switch (GenerationType)
 	{
-	case EGenerationType::GT_3D:
+	case EVoxelTutorialGenerationType::GT_3D:
 		Generate3DHeightMap(GetActorLocation() / 100);
 		break;
-	case EGenerationType::GT_2D:
+	case EVoxelTutorialGenerationType::GT_2D:
 		Generate2DHeightMap(GetActorLocation() / 100);
 		break;
 	default:
@@ -79,7 +79,7 @@ void AChunkBase::ClearMesh()
 	MeshData.Clear();
 }
 
-void AChunkBase::ModifyVoxel(const FIntVector Position, const EBlock Block)
+void AChunkBase::ModifyVoxel(const FIntVector Position, const EVoxelTutorialBlock Block)
 {
 	if (Position.X >= Size || Position.Y >= Size || Position.Z >= Size || Position.X < 0 || Position.Y < 0 || Position.Z < 0) return;
 	

@@ -24,10 +24,10 @@ void AGreedyChunk::Generate2DHeightMap(const FVector Position)
 
 			for (int z = 0; z < Size; z++)
 			{
-				if (z < Height - 3) Blocks[GetBlockIndex(x, y, z)] = EBlock::Stone;
-				else if (z < Height - 1) Blocks[GetBlockIndex(x, y, z)] = EBlock::Dirt;
-				else if (z == Height - 1) Blocks[GetBlockIndex(x, y, z)] = EBlock::Grass;
-				else Blocks[GetBlockIndex(x, y, z)] = EBlock::Air;
+				if (z < Height - 3) Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Stone;
+				else if (z < Height - 1) Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Dirt;
+				else if (z == Height - 1) Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Grass;
+				else Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Air;
 			}
 		}
 	}
@@ -45,11 +45,11 @@ void AGreedyChunk::Generate3DHeightMap(const FVector Position)
 
 				if (NoiseValue >= 0)
 				{
-					Blocks[GetBlockIndex(x, y, z)] = EBlock::Air;
+					Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Air;
 				}
 				else
 				{
-					Blocks[GetBlockIndex(x, y, z)] = EBlock::Stone;
+					Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Stone;
 				}
 			}
 		}
@@ -93,12 +93,12 @@ void AGreedyChunk::GenerateMesh()
 					const auto CurrentBlock = GetBlock(ChunkItr);
 					const auto CompareBlock = GetBlock(ChunkItr + AxisMask);
 
-					const bool CurrentBlockOpaque = CurrentBlock != EBlock::Air;
-					const bool CompareBlockOpaque = CompareBlock != EBlock::Air;
+					const bool CurrentBlockOpaque = CurrentBlock != EVoxelTutorialBlock::Air;
+					const bool CompareBlockOpaque = CompareBlock != EVoxelTutorialBlock::Air;
 
 					if (CurrentBlockOpaque == CompareBlockOpaque)
 					{
-						Mask[N++] = FMask{EBlock::Null, 0};
+						Mask[N++] = FMask{EVoxelTutorialBlock::Null, 0};
 					}
 					else if (CurrentBlockOpaque)
 					{
@@ -165,7 +165,7 @@ void AGreedyChunk::GenerateMesh()
 						{
 							for (int k = 0; k < Width; ++k)
 							{
-								Mask[N + k + l * Axis1Limit] = FMask{EBlock::Null, 0};
+								Mask[N + k + l * Axis1Limit] = FMask{EVoxelTutorialBlock::Null, 0};
 							}
 						}
 
@@ -249,7 +249,7 @@ void AGreedyChunk::CreateQuad(
 	VertexCount += 4;
 }
 
-void AGreedyChunk::ModifyVoxelData(const FIntVector Position, const EBlock Block)
+void AGreedyChunk::ModifyVoxelData(const FIntVector Position, const EVoxelTutorialBlock Block)
 {
 	const int Index = GetBlockIndex(Position.X, Position.Y, Position.Z);
 	
@@ -261,10 +261,10 @@ int AGreedyChunk::GetBlockIndex(const int X, const int Y, const int Z) const
 	return Z * Size * Size + Y * Size + X;
 }
 
-EBlock AGreedyChunk::GetBlock(const FIntVector Index) const
+EVoxelTutorialBlock AGreedyChunk::GetBlock(const FIntVector Index) const
 {
 	if (Index.X >= Size || Index.Y >= Size || Index.Z >= Size || Index.X < 0 || Index.Y < 0 || Index.Z < 0)
-		return EBlock::Air;
+		return EVoxelTutorialBlock::Air;
 	return Blocks[GetBlockIndex(Index.X, Index.Y, Index.Z)];
 }
 
@@ -273,16 +273,16 @@ bool AGreedyChunk::CompareMask(const FMask M1, const FMask M2) const
 	return M1.Block == M2.Block && M1.Normal == M2.Normal;
 }
 
-int AGreedyChunk::GetTextureIndex(const EBlock Block, const FVector Normal) const
+int AGreedyChunk::GetTextureIndex(const EVoxelTutorialBlock Block, const FVector Normal) const
 {
 	switch (Block) {
-	case EBlock::Grass:
+	case EVoxelTutorialBlock::Grass:
 		{
 			if (Normal == FVector::UpVector) return 0;
 			return 1;
 		}
-	case EBlock::Dirt: return 2;
-	case EBlock::Stone: return 3;
+	case EVoxelTutorialBlock::Dirt: return 2;
+	case EVoxelTutorialBlock::Stone: return 3;
 	default: return 255;
 	}
 }

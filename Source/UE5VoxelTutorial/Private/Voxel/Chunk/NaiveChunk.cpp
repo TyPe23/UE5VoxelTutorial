@@ -24,12 +24,12 @@ void ANaiveChunk::Generate2DHeightMap(const FVector Position)
 
 			for (int z = 0; z < Height; z++)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = EBlock::Stone;
+				Blocks[GetBlockIndex(x,y,z)] = EVoxelTutorialBlock::Stone;
 			}
 
 			for (int z = Height; z < Size; z++)
 			{
-				Blocks[GetBlockIndex(x,y,z)] = EBlock::Air;
+				Blocks[GetBlockIndex(x,y,z)] = EVoxelTutorialBlock::Air;
 			}
 			
 		}
@@ -48,11 +48,11 @@ void ANaiveChunk::Generate3DHeightMap(const FVector Position)
 
 				if (NoiseValue >= 0)
 				{
-					Blocks[GetBlockIndex(x, y, z)] = EBlock::Air;
+					Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Air;
 				}
 				else
 				{
-					Blocks[GetBlockIndex(x, y, z)] = EBlock::Stone;
+					Blocks[GetBlockIndex(x, y, z)] = EVoxelTutorialBlock::Stone;
 				}
 			}
 		}
@@ -67,11 +67,11 @@ void ANaiveChunk::GenerateMesh()
 		{
 			for (int z = 0; z < Size; z++)
 			{
-				if (Blocks[GetBlockIndex(x,y,z)] != EBlock::Air)
+				if (Blocks[GetBlockIndex(x,y,z)] != EVoxelTutorialBlock::Air)
 				{
 					const auto Position = FVector(x,y,z);
 					
-					for (auto Direction : {EDirection::Forward, EDirection::Right, EDirection::Back, EDirection::Left, EDirection::Up, EDirection::Down})
+					for (auto Direction : {EVoxelTutorialDirection::Forward, EVoxelTutorialDirection::Right, EVoxelTutorialDirection::Back, EVoxelTutorialDirection::Left, EVoxelTutorialDirection::Up, EVoxelTutorialDirection::Down})
 					{
 						if (Check(GetPositionInDirection(Direction, Position)))
 						{
@@ -88,10 +88,10 @@ bool ANaiveChunk::Check(const FVector Position) const
 {
 	if (Position.X >= Size || Position.Y >= Size || Position.X < 0 || Position.Y < 0 || Position.Z < 0) return true;
 	if (Position.Z >= Size) return true;
-	return Blocks[GetBlockIndex(Position.X, Position.Y, Position.Z)] == EBlock::Air;
+	return Blocks[GetBlockIndex(Position.X, Position.Y, Position.Z)] == EVoxelTutorialBlock::Air;
 }
 
-void ANaiveChunk::CreateFace(const EDirection Direction, const FVector Position)
+void ANaiveChunk::CreateFace(const EVoxelTutorialDirection Direction, const FVector Position)
 {
 	const auto Color = FColor::MakeRandomColor();
 	const auto Normal = GetNormal(Direction);
@@ -105,7 +105,7 @@ void ANaiveChunk::CreateFace(const EDirection Direction, const FVector Position)
 	VertexCount += 4;
 }
 
-TArray<FVector> ANaiveChunk::GetFaceVertices(EDirection Direction, const FVector Position) const
+TArray<FVector> ANaiveChunk::GetFaceVertices(EVoxelTutorialDirection Direction, const FVector Position) const
 {
 	TArray<FVector> Vertices;
 
@@ -117,35 +117,35 @@ TArray<FVector> ANaiveChunk::GetFaceVertices(EDirection Direction, const FVector
 	return Vertices;
 }
 
-FVector ANaiveChunk::GetPositionInDirection(const EDirection Direction, const FVector Position) const
+FVector ANaiveChunk::GetPositionInDirection(const EVoxelTutorialDirection Direction, const FVector Position) const
 {
 	switch (Direction)
 	{
-	case EDirection::Forward: return Position + FVector::ForwardVector;
-	case EDirection::Back: return Position + FVector::BackwardVector;
-	case EDirection::Left: return Position + FVector::LeftVector;
-	case EDirection::Right: return Position + FVector::RightVector;
-	case EDirection::Up: return Position + FVector::UpVector;
-	case EDirection::Down: return Position + FVector::DownVector;
+	case EVoxelTutorialDirection::Forward: return Position + FVector::ForwardVector;
+	case EVoxelTutorialDirection::Back: return Position + FVector::BackwardVector;
+	case EVoxelTutorialDirection::Left: return Position + FVector::LeftVector;
+	case EVoxelTutorialDirection::Right: return Position + FVector::RightVector;
+	case EVoxelTutorialDirection::Up: return Position + FVector::UpVector;
+	case EVoxelTutorialDirection::Down: return Position + FVector::DownVector;
 	default: throw std::invalid_argument("Invalid direction");
 	}
 }
 
-FVector ANaiveChunk::GetNormal(const EDirection Direction) const
+FVector ANaiveChunk::GetNormal(const EVoxelTutorialDirection Direction) const
 {
 	switch (Direction)
 	{
-	case EDirection::Forward: return FVector::ForwardVector;
-	case EDirection::Right: return FVector::RightVector;
-	case EDirection::Back: return FVector::BackwardVector;
-	case EDirection::Left: return FVector::LeftVector;
-	case EDirection::Up: return FVector::UpVector;
-	case EDirection::Down: return FVector::DownVector;
+	case EVoxelTutorialDirection::Forward: return FVector::ForwardVector;
+	case EVoxelTutorialDirection::Right: return FVector::RightVector;
+	case EVoxelTutorialDirection::Back: return FVector::BackwardVector;
+	case EVoxelTutorialDirection::Left: return FVector::LeftVector;
+	case EVoxelTutorialDirection::Up: return FVector::UpVector;
+	case EVoxelTutorialDirection::Down: return FVector::DownVector;
 	default: throw std::invalid_argument("Invalid direction");
 	}
 }
 
-void ANaiveChunk::ModifyVoxelData(const FIntVector Position, const EBlock Block)
+void ANaiveChunk::ModifyVoxelData(const FIntVector Position, const EVoxelTutorialBlock Block)
 {
 	const int Index = GetBlockIndex(Position.X, Position.Y, Position.Z);
 	
