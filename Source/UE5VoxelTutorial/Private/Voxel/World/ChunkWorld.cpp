@@ -20,10 +20,10 @@ void AChunkWorld::BeginPlay()
 	
 	switch (GenerationType)
 	{
-	case EGenerationType::GT_3D:
+	case EVoxelTutorialGenerationType::GT_3D:
 		Generate3DWorld();
 		break;
-	case EGenerationType::GT_2D:
+	case EVoxelTutorialGenerationType::GT_2D:
 		Generate2DWorld();
 		break;
 	default:
@@ -53,7 +53,7 @@ void AChunkWorld::Generate3DWorld()
 					this
 				);
 
-				chunk->GenerationType = EGenerationType::GT_3D;
+				chunk->GenerationType = EVoxelTutorialGenerationType::GT_3D;
 				chunk->Frequency = Frequency;
 				chunk->Material = Material;
 				chunk->Size = Size;
@@ -84,7 +84,7 @@ void AChunkWorld::Generate2DWorld()
 				this
 			);
 
-			chunk->GenerationType = EGenerationType::GT_2D;
+			chunk->GenerationType = EVoxelTutorialGenerationType::GT_2D;
 			chunk->Frequency = Frequency;
 			chunk->Material = Material;
 			chunk->Size = Size;

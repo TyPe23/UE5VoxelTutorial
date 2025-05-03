@@ -22,10 +22,10 @@ protected:
 	virtual void Generate2DHeightMap(FVector Position) override;
 	virtual void Generate3DHeightMap(FVector Position) override;
 	virtual void GenerateMesh() override;
-	virtual void ModifyVoxelData(const FIntVector Position, const EBlock Block) override;
+	virtual void ModifyVoxelData(const FIntVector Position, const EVoxelTutorialBlock Block) override;
 
 private:
-	TArray<EBlock> Blocks;
+	TArray<EVoxelTutorialBlock> Blocks;
 
 	const FVector BlockVertexData[8] = {
 		FVector(100,100,100),
@@ -48,9 +48,9 @@ private:
 	};
 	
 	bool Check(FVector Position) const;
-	void CreateFace(EDirection Direction, FVector Position);
-	TArray<FVector> GetFaceVertices(EDirection Direction, FVector Position) const;
-	FVector GetPositionInDirection(EDirection Direction, FVector Position) const;
-	FVector GetNormal(EDirection Direction) const;
+	void CreateFace(EVoxelTutorialDirection Direction, FVector Position);
+	TArray<FVector> GetFaceVertices(EVoxelTutorialDirection Direction, FVector Position) const;
+	FVector GetPositionInDirection(EVoxelTutorialDirection Direction, FVector Position) const;
+	FVector GetNormal(EVoxelTutorialDirection Direction) const;
 	int GetBlockIndex(int X, int Y, int Z) const;
 };
