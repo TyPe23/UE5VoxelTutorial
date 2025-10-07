@@ -13,6 +13,24 @@
 class FastNoiseLite;
 class UProceduralMeshComponent;
 
+USTRUCT(BlueprintType)
+struct FVoxelData :public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Px;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Py;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Pz;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float tz;
+};
+
 UCLASS(Abstract)
 class UE5VOXELTUTORIAL_API AChunkBase : public AActor
 {
@@ -24,6 +42,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category="Chunk")
 	int Size = 64;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Chunk")
+	TObjectPtr<UDataTable> VoxelData;
 	
 	TObjectPtr<UMaterialInterface> Material;
 	float Frequency;

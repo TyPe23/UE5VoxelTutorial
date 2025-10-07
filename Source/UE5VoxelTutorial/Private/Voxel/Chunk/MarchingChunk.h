@@ -19,6 +19,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Marching Cubes")
 	bool Interpolation = false;
 	
+	UPROPERTY(EditDefaultsOnly, Category="Marching Cubes")
+	TArray<float> Voxels;
 protected:
 	virtual void Setup() override;
 	virtual void Generate2DHeightMap(FVector Position) override;
@@ -26,7 +28,6 @@ protected:
 	virtual void GenerateMesh() override;
 
 private:
-	TArray<float> Voxels;
 	int TriangleOrder[3] = {0, 1, 2};
 	
 	void March(int X, int Y, int Z, const float Cube[8]);

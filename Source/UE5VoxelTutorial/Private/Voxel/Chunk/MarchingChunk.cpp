@@ -43,9 +43,14 @@ void AMarchingChunk::Generate3DHeightMap(const FVector Position)
 		{
 			for (int z = 0; z <= Size; ++z)
 			{
-				Voxels[GetVoxelIndex(x,y,z)] = Noise->GetNoise(x + Position.X, y + Position.Y, z + Position.Z);	
+				Voxels[GetVoxelIndex(x,y,z)] = 0;	
 			}
 		}
+	}
+	for (auto it : VoxelData->GetRowMap()) {
+		FVoxelData* data = (FVoxelData*)(it.Value);
+
+		Voxels[GetVoxelIndex(data->Px, data->Py, data->Pz)] = 1;
 	}
 }
 
