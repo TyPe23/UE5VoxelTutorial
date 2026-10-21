@@ -43,9 +43,14 @@ void AMarchingChunk::Generate3DHeightMap(const FVector Position)
 		{
 			for (int z = 0; z <= Size; ++z)
 			{
-				Voxels[GetVoxelIndex(x, y, z)] = Noise->GetNoise(x + Position.X, y + Position.Y, z + Position.Z);
+				Voxels[GetVoxelIndex(x,y,z)] = 0;	
 			}
 		}
+	}
+	for (auto it : VoxelData->GetRowMap()) {
+		FVoxelData* data = (FVoxelData*)(it.Value);
+
+		Voxels[GetVoxelIndex(data->Px, data->Py, data->Pz)] = 1;
 	}
 }
 
@@ -142,9 +147,9 @@ void AMarchingChunk::March(const int X, const int Y, const int Z, const float Cu
 	{
 		if (TriangleConnectionTable[VertexMask][3 * i] < 0) break;
 
-		auto V1 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i]] * 100;
-		auto V2 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i + 1]] * 100;
-		auto V3 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i + 2]] * 100;
+		auto V1 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i]];// * 100;
+		auto V2 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i + 1]];/// *100;
+		auto V3 = EdgeVertex[TriangleConnectionTable[VertexMask][3 * i + 2]];// *100;
 
 		auto Normal = FVector::CrossProduct(V2 - V1, V3 - V1);
 		auto Color = FColor::MakeRandomColor();
