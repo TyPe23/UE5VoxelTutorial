@@ -19,31 +19,31 @@ void AMarchingChunk::Generate2DHeightMap(const FVector Position)
 		{
 			const float Xpos = x + Position.X;
 			const float ypos = y + Position.Y;
-			
+
 			const int Height = FMath::Clamp(FMath::RoundToInt((Noise->GetNoise(Xpos, ypos) + 1) * Size / 2), 0, Size);
 
 			for (int z = 0; z < Height; z++)
 			{
-				Voxels[GetVoxelIndex(x,y,z)] = 1.0f;
+				Voxels[GetVoxelIndex(x, y, z)] = 1.0f;
 			}
 
 			for (int z = Height; z < Size; z++)
 			{
-				Voxels[GetVoxelIndex(x,y,z)] = -1.0f;
+				Voxels[GetVoxelIndex(x, y, z)] = -1.0f;
 			}
 		}
 	}
 }
 
 void AMarchingChunk::Generate3DHeightMap(const FVector Position)
-{	
+{
 	for (int x = 0; x <= Size; ++x)
 	{
 		for (int y = 0; y <= Size; ++y)
 		{
 			for (int z = 0; z <= Size; ++z)
 			{
-				Voxels[GetVoxelIndex(x,y,z)] = Noise->GetNoise(x + Position.X, y + Position.Y, z + Position.Z);	
+				Voxels[GetVoxelIndex(x, y, z)] = Noise->GetNoise(x + Position.X, y + Position.Y, z + Position.Z);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ void AMarchingChunk::GenerateMesh()
 	}
 
 	float Cube[8];
-	
+
 	for (int X = 0; X < Size; ++X)
 	{
 		for (int Y = 0; Y < Size; ++Y)
@@ -75,13 +75,38 @@ void AMarchingChunk::GenerateMesh()
 			{
 				for (int i = 0; i < 8; ++i)
 				{
-					Cube[i] = Voxels[GetVoxelIndex(X + VertexOffset[i][0],Y + VertexOffset[i][1],Z + VertexOffset[i][2])];
+					Cube[i] = Voxels[GetVoxelIndex(X + VertexOffset[i][0], Y + VertexOffset[i][1], Z + VertexOffset[i][2])];
 				}
 
-				March(X,Y,Z, Cube);
+				March(X, Y, Z, Cube);
 			}
 		}
 	}
+}
+
+void AMarchingChunk::ModifyVoxelData(const FIntVector Position, const EVoxelTutorialBlock Block)
+{
+	switch (Block) {
+		case EVoxelTutorialBlock::Stone:
+			AddVoxel(Position);
+			break;
+		case EVoxelTutorialBlock::Air:
+			RemoveVoxel(Position);
+			break;
+	}
+	Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)] = FMath::Clamp(Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)], -1, 1);
+}
+
+void AMarchingChunk::AddVoxel(const FIntVector Position)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Voxle Value: %f"), Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)])
+	Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)] += 0.5f;
+}
+
+void AMarchingChunk::RemoveVoxel(const FIntVector Position)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Voxle Value: %f"), Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)])
+	Voxels[GetVoxelIndex(Position.X, Position.Y, Position.Z)] -= 0.5f;
 }
 
 void AMarchingChunk::March(const int X, const int Y, const int Z, const float Cube[8])
@@ -96,9 +121,9 @@ void AMarchingChunk::March(const int X, const int Y, const int Z, const float Cu
 	}
 
 	const int EdgeMask = CubeEdgeFlags[VertexMask];
-	
+
 	if (EdgeMask == 0) return;
-		
+
 	// Find intersection points
 	for (int i = 0; i < 12; ++i)
 	{
@@ -123,28 +148,28 @@ void AMarchingChunk::March(const int X, const int Y, const int Z, const float Cu
 
 		auto Normal = FVector::CrossProduct(V2 - V1, V3 - V1);
 		auto Color = FColor::MakeRandomColor();
-		
+
 		Normal.Normalize();
 
-		MeshData.Vertices.Append({V1, V2, V3});
-		
+		MeshData.Vertices.Append({ V1, V2, V3 });
+
 		MeshData.Triangles.Append({
 			VertexCount + TriangleOrder[0],
 			VertexCount + TriangleOrder[1],
 			VertexCount + TriangleOrder[2]
-		});
+			});
 
 		MeshData.Normals.Append({
 			Normal,
 			Normal,
 			Normal
-		});
+			});
 
 		MeshData.Colors.Append({
 			Color,
 			Color,
 			Color
-		});
+			});
 
 		VertexCount += 3;
 	}

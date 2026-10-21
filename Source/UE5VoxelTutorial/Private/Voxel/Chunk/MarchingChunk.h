@@ -24,6 +24,10 @@ protected:
 	virtual void Generate2DHeightMap(FVector Position) override;
 	virtual void Generate3DHeightMap(FVector Position) override;
 	virtual void GenerateMesh() override;
+	virtual void ModifyVoxelData(const FIntVector Position, const EVoxelTutorialBlock Block) override;
+
+	virtual void AddVoxel(const FIntVector Position);
+	virtual void RemoveVoxel(const FIntVector Position);
 
 private:
 	TArray<float> Voxels;
